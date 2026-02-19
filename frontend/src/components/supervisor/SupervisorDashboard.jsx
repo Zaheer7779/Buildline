@@ -7,6 +7,7 @@ import { AssignmentPanel } from './AssignmentPanel';
 import { InwardBikeForm } from './InwardBikeForm';
 import { BulkInwardModal } from './BulkInwardModal';
 import { ManageTechnicians } from './ManageTechnicians';
+import { ManageLocations } from './ManageLocations';
 import toast from 'react-hot-toast';
 
 export const SupervisorDashboard = () => {
@@ -198,7 +199,10 @@ export const SupervisorDashboard = () => {
         )}
 
         {view === 'manage' && (
-          <ManageTechnicians onSuccess={loadData} />
+          <div className="space-y-8">
+            <ManageLocations onSuccess={loadData} />
+            <ManageTechnicians onSuccess={loadData} />
+          </div>
         )}
       </div>
 

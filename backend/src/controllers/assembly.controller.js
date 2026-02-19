@@ -496,6 +496,56 @@ class AssemblyController {
   }
 
   /**
+   * Create a location
+   * POST /api/assembly/locations
+   */
+  async createLocation(req, res) {
+    try {
+      const { name, code, type, address } = req.body;
+      if (!name || !code || !type) {
+        return res.status(400).json({ success: false, message: 'Name, code, and type are required' });
+      }
+      const location = await assemblyService.createLocation({ name, code, type, address });
+      res.status(201).json({ success: true, message: 'Location created', data: location });
+    } catch (error) {
+      console.error('Create location error:', error);
+      res.status(500).json({ success: false, message: error.message || 'Failed to create location' });
+    }
+  }
+
+  /**
+   * Update a location
+   * PUT /api/assembly/locations/:id
+   */
+  async updateLocation(req, res) {
+    try {
+      const { id } = req.params;
+      const updates = req.body;
+      const location = await assemblyService.updateLocation(id, updates);
+      res.json({ success: true, message: 'Location updated', data: location });
+    } catch (error) {
+      console.error('Update location error:', error);
+      res.status(500).json({ success: false, message: error.message || 'Failed to update location' });
+    }
+  }
+
+  /**
+   * Delete a location
+   * DELETE /api/assembly/locations/:id
+   */
+  async deleteLocation(req, res) {
+    try {
+      const { id } = req.params;
+      await assemblyService.deleteLocation(id);
+      res.json({ success: true, message: 'Location deleted' });
+    } catch (error) {
+      console.error('Delete location error:', error);
+      const status = error.message.includes('Cannot delete') ? 400 : 500;
+      res.status(status).json({ success: false, message: error.message || 'Failed to delete location' });
+    }
+  }
+
+  /**
    * Get all bins
    * GET /api/assembly/bins
    */

@@ -312,6 +312,61 @@ class AssemblyService {
   }
 
   /**
+   * Create a new location
+   */
+  async createLocation({ name, code, type, address }) {
+    const { data, error } = await supabase
+      .from('locations')
+      .insert({ name, code, type, address })
+      .select()
+      .single();
+
+    if (error) throw error;
+    return data;
+  }
+
+  /**
+   * Update a location
+   */
+  async updateLocation(id, updates) {
+    const { data, error } = await supabase
+      .from('locations')
+      .update(updates)
+      .eq('id', id)
+      .select()
+      .single();
+
+    if (error) throw error;
+    return data;
+  }
+
+  /**
+   * Delete a location (soft delete by setting is_active = false)
+   */
+  async deleteLocation(id) {
+    // Check if any active journeys reference this location
+    const { count } = await supabase
+      .from('assembly_journeys')
+      .select('id', { count: 'exact', head: true })
+      .eq('current_location_id', id)
+      .neq('current_status', 'ready_for_sale');
+
+    if (count > 0) {
+      throw new Error(`Cannot delete location: ${count} active bike(s) are at this location`);
+    }
+
+    const { data, error } = await supabase
+      .from('locations')
+      .update({ is_active: false })
+      .eq('id', id)
+      .select()
+      .single();
+
+    if (error) throw error;
+    return data;
+  }
+
+  /**
    * Get all bins
    */
   async getBins() {

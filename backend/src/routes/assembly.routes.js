@@ -241,6 +241,24 @@ router.get(
   assemblyController.getLocations
 );
 
+router.post(
+  '/locations',
+  authorize('admin', 'supervisor'),
+  assemblyController.createLocation
+);
+
+router.put(
+  '/locations/:id',
+  authorize('admin', 'supervisor'),
+  assemblyController.updateLocation
+);
+
+router.delete(
+  '/locations/:id',
+  authorize('admin', 'supervisor'),
+  assemblyController.deleteLocation
+);
+
 // ============================================================================
 // BIN LOCATIONS
 // ============================================================================

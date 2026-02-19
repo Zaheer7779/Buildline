@@ -1,4 +1,4 @@
-const { supabase } = require('../../config/supabase');
+const { supabase, supabaseAdmin } = require('../../config/supabase');
 
 /**
  * Authentication middleware
@@ -27,8 +27,8 @@ const authenticate = async (req, res, next) => {
       });
     }
 
-    // Fetch user profile with role
-    const { data: profile, error: profileError } = await supabase
+    // Fetch user profile with role (use admin client to bypass RLS)
+    const { data: profile, error: profileError } = await supabaseAdmin
       .from('user_profiles')
       .select('*')
       .eq('id', user.id)

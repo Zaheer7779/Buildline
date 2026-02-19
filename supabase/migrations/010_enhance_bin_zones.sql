@@ -66,12 +66,12 @@ BEGIN
   IF OLD.current_status IS DISTINCT FROM NEW.current_status THEN
 
     -- Determine target zone based on new status
-    v_target_zone := CASE NEW.current_status
-      WHEN 'inwarded' THEN 'inward_zone'
-      WHEN 'assigned', 'in_progress' THEN 'assembly_zone'
-      WHEN 'completed' THEN 'completion_zone'
-      WHEN 'qc_review' THEN 'qc_zone'
-      WHEN 'ready_for_sale' THEN 'ready_zone'
+    v_target_zone := CASE
+      WHEN NEW.current_status = 'inwarded' THEN 'inward_zone'
+      WHEN NEW.current_status IN ('assigned', 'in_progress') THEN 'assembly_zone'
+      WHEN NEW.current_status = 'completed' THEN 'completion_zone'
+      WHEN NEW.current_status = 'qc_review' THEN 'qc_zone'
+      WHEN NEW.current_status = 'ready_for_sale' THEN 'ready_zone'
     END;
 
     -- Find an available bin in the target zone (at same location)

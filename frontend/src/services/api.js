@@ -103,6 +103,9 @@ export const assemblyApi = {
 
   // Locations
   getLocations: () => api.get('/assembly/locations'),
+  createLocation: (data) => api.post('/assembly/locations', data),
+  updateLocation: (id, data) => api.put(`/assembly/locations/${id}`, data),
+  deleteLocation: (id) => api.delete(`/assembly/locations/${id}`),
 
   // Bins
   getBins: () => api.get('/assembly/bins'),
